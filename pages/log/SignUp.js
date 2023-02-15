@@ -1,7 +1,8 @@
 import '@/firebase/client';
 import { Box, TextField, Button } from "@mui/material";
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { getDatabase, ref, set, onValue, push, } from 'firebase/database';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, } from "firebase/auth";
+import { getDatabase, ref, set, onValue, push, update, } from 'firebase/database';
+import { getDownloadURL, getStorage, ref as refStorage, } from 'firebase/storage'
 import { useState } from "react";
 import { useRouter } from "next/router";
 
@@ -18,29 +19,35 @@ export default function SignUp() {
 
     const router = useRouter()
     const database = getDatabase()
+    const storage = getStorage()
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const auth = getAuth()
-        await createUserWithEmailAndPassword(auth, email, password)
+        if(email && password === confirmPassword && username) {
+            const auth = getAuth()
+            await createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user
 
-                updateProfile(user , {
-                    displayName: username,
-                    photoURL: 'https://i.pravatar.cc/300'
-                })
-
+                getDownloadURL(refStorage(storage, 'profile_icon_default/profile_default_icon.svg'))
+                    .then(url => {
+                        updateProfile(user, {
+                            displayName: username,
+                            photoURL: url
+                        })
+                    })
                 set(ref(database, 'users/' + user.uid), {
                     username: username,
-                    email: email,
-                    
+                    email: email,  
                 })
-                
-                router.push('./SignIn')
-
-                              
+                router.push('./SignIn')         
             })
+        } else if (password !== confirmPassword) {
+            alert("La contraseña no coincide")
+        } else {
+            alert("Completar todos los campos")
+        }
     }
 
 

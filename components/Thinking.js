@@ -22,6 +22,7 @@ export default function Thinking(props){
             username,
             message: thinking
         })
+        document.getElementById('input_thinking').value = ""
     }
     
     return(

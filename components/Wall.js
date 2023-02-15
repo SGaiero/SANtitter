@@ -19,22 +19,21 @@ export default function Wall(){
                     snapshot.forEach(keys => {
                         keys_tweets.push(keys.val())
                     })
-                    console.log(keys_tweets, "keeys tweets")
                     setGlobalUser(keys_tweets.slice().reverse())
-                    
-
                 })
             }
         })
     }, [])
 
-    console.log(globalUser, "global user")
-
     return(
-        <Box display={"flex"} sx={{display: "flex", flexDirection: "column"}}>
+        <Box sx={{}}>
             {globalUser.map((tweets, index) => (
-                <ul key={index}>
-                    <li>{tweets.username}: {tweets.message}</li>
+                <ul key={index} style={{display: "flex", justifyContent:"flex-start", }}>
+                    <li>
+                        <span style={{fontWeight: "bold"}}>{tweets.username}</span>
+                        <br style={{margin: "10px"}}/>
+                        <span style={{fontWeight: 300}}>{tweets.message}</span>
+                    </li>
                 </ul>
             ))}
         </Box>

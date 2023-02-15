@@ -34,11 +34,11 @@ export default function HomePage(){
             <header>
                 <Header username={username} photo={photo}/>
             </header>
-            <Grid container sx={{display:"flex", justifyContent:"center", textAlign:"center"}}>
+            <Grid container sx={{display:"flex"}}>
                 <Grid item xs >
                     <Menu/>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={3} sx={{display: "flex", flexDirection: "column",}}>
                     <Thinking username={username} photo={photo} user={user}/>
                     <Wall user ={user}/>
                 </Grid>
